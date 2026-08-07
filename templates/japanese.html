@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+```
+<title>家計簿AI</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+```
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<h1>💰 家計簿AI</h1>
+
+<p>日本生活のスマート家計管理</p>
+
+<a href="/japanese">
+    <button>日本語</button>
+</a>
+
+<a href="/">
+    <button>English</button>
+</a>
+
+<a href="/logout">
+    <button>ログアウト</button>
+</a>
+
+<br><br>
+
+<h3>💵 月の予算: ¥{{ budget }}</h3>
+
+<h3>💸 合計支出: ¥{{ total }}</h3>
+
+<h3>💰 残り金額: ¥{{ remaining }}</h3>
+
+<hr>
+
+<h2>📊 月間サマリー</h2>
+
+<h3>トップカテゴリー: {{ top_category }}</h3>
+
+<hr>
+
+<h2>支出追加</h2>
+
+<form method="POST" action="/">
+
+    <input
+    type="text"
+    name="name"
+    placeholder="支出名"
+    required>
+
+    <br><br>
+
+    <input
+    type="number"
+    name="amount"
+    placeholder="金額"
+    required>
+
+    <br><br>
+
+    <select name="category">
+
+        <option value="Food">食べ物</option>
+
+        <option value="Train">電車</option>
+
+        <option value="Rent">家賃</option>
+
+        <option value="Shopping">買い物</option>
+
+        <option value="Other">その他</option>
+
+    </select>
+
+    <br><br>
+
+    <button type="submit">
+        追加
+    </button>
+
+</form>
+
+<hr>
+
+<h2>📋 支出一覧</h2>
+
+{% for item in expenses %}
+
+<div class="expense-card">
+
+    🧾 {{ item[1] }}
+    -
+    ¥{{ item[2] }}
+    -
+    {{ item[3] }}
+
+    <a href="/delete/{{ item[0] }}">
+        ❌
+    </a>
+
+</div>
+
+<br>
+
+{% endfor %}
+
+<hr>
+
+<h2>📊 支出グラフ</h2>
+
+<img src="/static/chart.png" width="350">
+```
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Kakeibo AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top-bar">
+
+    <a href="/pdf">
+    <button>📄 Download PDF Report</button>
+</a>
+
+    <h1>💰 Kakeibo AI Dashboard</h1>
+
+    <a href="/logout">
+        <button>Logout</button>
+    </a>
+
+</div>
+    <button onclick="toggleDarkMode()">
+    🌙 Dark Mode
+</button>
+
+<div class="cards">
+
+    <div class="card">
+        <h3>💸 Total Expenses</h3>
+        <h2>¥{{ total }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>💵 Budget</h3>
+        <h2>¥{{ budget }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>💰 Remaining</h3>
+        <h2>¥{{ remaining }}</h2>
+    </div>
+
+    <div class="card">
+        <h3>🎯 Savings Goal</h3>
+        <h2>¥{{ savings_goal }}</h2>
+    </div>
+
+</div>
+
+<p>
+    {{ ((total / budget) * 100)|round(1) }}%
+    Used
+</p>
+
+    <hr>
+<div class="info-cards">
+
+    <div class="card">
+
+        <h2>📊 Monthly Summary</h2>
+
+        <p>🍔 Food: ¥{{ food_total }}</p>
+
+        <p>🚃 Transport: ¥{{ transport_total }}</p>
+
+        <p>🛍 Shopping: ¥{{ shopping_total }}</p>
+
+        <p>🧾 Bills: ¥{{ bills_total }}</p>
+
+        <p>📦 Other: ¥{{ other_total }}</p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📈 Statistics</h2>
+
+        <p>📊 Average Expense: ¥{{ average_expense }}</p>
+
+        <p>
+            🏆 Highest Expense:
+            {{ highest_expense_name }}
+            (¥{{ highest_expense }})
+        </p>
+
+        <p>🥇 Top Category: {{ top_category }}</p>
+
+    </div>
+
+</div>
+<hr>
+
+<div class="stats-card">
+
+<h2>💰 Budget Remaining</h2>
+
+<p>💰 Budget: ¥{{ budget }}</p>
+
+<p>🏦 Remaining: ¥{{ remaining }}</p>
+
+<p>📊 Remaining: {{ savings_progress }}%</p>
+
+<div style="width:100%; background:#ddd; border-radius:10px;">
+
+    <div class="progress-fill"
+     style="width: {{ savings_progress | string }}%;">
+    {{ savings_progress }}%
+</div>
+</div>
+</div>
+<hr>
+    <hr>{% if warning %}
+
+<h3>{{ warning }}</h3>
+
+{% endif %}
+
+{% if ai_advice %}
+
+<div class="ai-advice">
+    {{ ai_advice }}
+</div>
+
+{% endif %}
+Savings Goal: ¥ [________]
+    <h2>Add Expense</h2>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Expense Name"
+            required>
+
+        <br><br>
+
+        <input
+            type="number"
+            name="amount"
+            placeholder="Amount"
+            required>
+
+        <br><br>
+<input
+    type="date"
+    name="expense_date"
+    required>
+
+<br><br>
+        <select name="category">
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Bills">Bills</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            Add Expense
+        </button>
+
+    </form>
+
+
+<form method="GET">
+
+    <input
+    type="text"
+    name="search"
+    placeholder="Search expense..."
+    value="{{ search }}">
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+<hr>
+
+    <h2>📋 Your Expenses</h2>
+<a href="/export">
+    <button>
+        📥 Export CSV
+    </button>
+</a>
+
+<br><br>
+    {% for item in expenses %}
+
+    <div class="expense-card">
+
+     📅 {{ item[4] }}
+-
+🧾 {{ item[1] }}
+-
+¥{{ item[2] }}
+-
+{{ item[3] }}   
+
+        <a href="/delete/{{ item[0] }}">
+            ❌
+        </a>
+
+    </div>
+
+    <br>
+
+    {% endfor %}
+
+    <hr>
+
+    <div class="card chart-card">
+
+    <h2>📊 Expense Chart</h2>
+
+    <img src="/static/chart.png" width="350">
+
+</div>
+<div class="card chart-card">
+
+    <h2>📈 Daily Expense Trend</h2>
+
+    <img src="/static/trend_chart.png" width="350">
+
+</div>
+
+
+<footer>
+    © 2026 Kakeibo AI | Developed by Iresha Dhanandani
+</footer>
+
+<script>
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+}
+</script>
+
+</body>
+</html>
